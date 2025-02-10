@@ -22,7 +22,6 @@ BloodLink is a full-stack web application that enables users to connect with blo
 
 **Frontend:** React.js (Vite), Tailwind CSS, Axios, Redux Toolkit  
 **Backend:** Node.js, Express.js, MongoDB, Mongoose, JWT Authentication  
-**Deployment:** Vercel / Netlify (Frontend), Render / Heroku (Backend), MongoDB Atlas (Database)
 
 ---
 

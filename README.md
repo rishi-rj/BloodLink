@@ -81,54 +81,24 @@ cd BloodLink
 ```
 
 ### 2️⃣ Install dependencies:
-#### Backend Setup
+
 ```bash
-cd backend
-npm install
-```
-#### Frontend Setup
-```bash
-cd ../frontend
 npm install
 ```
 
 ### 3️⃣ Configure environment variables in `.env` file:
-#### Backend (`/backend/.env`)
+#### env (../.env`)
 ```env
 PORT=5000
 MONGO_URI=your-mongodb-connection-string
 JWT_SECRET=your-secret-key
 ```
-#### Frontend (`/frontend/.env`)
-```env
-VITE_API_BASE_URL=http://localhost:5000
-```
 
 ### 4️⃣ Start the application:
-#### Run Backend
+
 ```bash
-cd backend
-npm start
-```
-#### Run Frontend
-```bash
-cd frontend
 npm run dev
 ```
-
----
-
-## 🚀 Deployment
-
-### Frontend
-Deploy on **Vercel / Netlify**
-```bash
-npm run build
-```
-
-### Backend
-Deploy on **Render / Heroku**
-Ensure production environment variables are updated.
 
 ---
 

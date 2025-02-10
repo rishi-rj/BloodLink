@@ -26,7 +26,7 @@ export const userLogin = createAsyncThunk(
 
 //register
 export const userRegister = createAsyncThunk(
-  "auth/register",
+  "auth/register", // regeister endpoint
   async (
     {
       name,

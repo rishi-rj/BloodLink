@@ -22,7 +22,7 @@ const getDonarsListController = async (req, res) => {
     });
   }
 };
-//GET HOSPITAL LIST
+//GET list of hospitals
 const getHospitalListController = async (req, res) => {
   try {
     const hospitalData = await userModel

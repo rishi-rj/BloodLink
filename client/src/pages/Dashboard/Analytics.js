@@ -58,7 +58,7 @@ const Analytics = () => {
           <div
             className="card m-2 p-1"
             key={i}
-            style={{ width: "18rem", backgroundColor: ${colors[i]} }}
+            style={{ width: "18rem", backgroundColor: colors[i] }}
           >
             <div className="card-body">
               <h1 className="card-title bg-light text-dark text-center mb-3">

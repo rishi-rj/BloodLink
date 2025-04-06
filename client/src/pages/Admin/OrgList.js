@@ -30,7 +30,7 @@ const OrgList = () => {
         "Sure"
       );
       if (!answer) return;
-      const { data } = await API.delete(/api/admin/delete-donar/${id});
+      const { data } = await API.delete(`/api/admin/delete-donar/${id}`);
       alert(data?.message);
       window.location.reload();
     } catch (error) {

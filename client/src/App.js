@@ -16,11 +16,26 @@ import DonarList from "./pages/Admin/DonarList";
 import HospitalList from "./pages/Admin/HospitalList";
 import OrgList from "./pages/Admin/OrgList";
 import AdminHome from "./pages/Admin/AdminHome";
+import LandingPage from "./pages/LandingPage";
+import Layout from "./components/shared/Layout/Layout";
+
 function App() {
   return (
     <>
       <ToastContainer />
       <Routes>
+        {/* Public landing page */}
+        <Route path="/" element={<Layout><LandingPage /></Layout>} />
+        
+        {/* Protected routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/admin"
           element={
@@ -99,14 +114,6 @@ function App() {
           element={
             <ProtectedRoute>
               <Donar />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <HomePage />
             </ProtectedRoute>
           }
         />

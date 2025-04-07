@@ -1,20 +1,36 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import Header from "./Header";
+import LandingHeader from "./LandingHeader";
 import Sidebar from "./Sidebar";
 
 const Layout = ({ children }) => {
+  const auth = useSelector((state) => state.auth);
+  const user = auth?.user;
+
   return (
-    <>
-      <div className="header">
-        <Header />
-      </div>
-      <div className="row g-0">
-        <div className="col-md-3">
-          <Sidebar />
+    <div className="min-h-screen flex flex-col">
+      {user ? (
+        // Authenticated Layout
+        <div className="flex flex-col min-h-screen">
+          <Header />
+          <div className="flex flex-1">
+            <Sidebar />
+            <main className="flex-1 p-4">
+              {children}
+            </main>
+          </div>
         </div>
-        <div className="col-md-9">{children}</div>
-      </div>
-    </>
+      ) : (
+        // Unauthenticated Layout
+        <div className="flex flex-col min-h-screen">
+          <LandingHeader />
+          <main className="flex-1">
+            {children}
+          </main>
+        </div>
+      )}
+    </div>
   );
 };
 

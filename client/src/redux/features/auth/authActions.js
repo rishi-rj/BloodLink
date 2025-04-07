@@ -11,7 +11,7 @@ export const userLogin = createAsyncThunk(
       if (data.success) {
         alert(data.message);
         localStorage.setItem("token", data.token);
-        window.location.replace("/");
+        window.location.replace("/dashboard");
       }
       return data;
     } catch (error) {

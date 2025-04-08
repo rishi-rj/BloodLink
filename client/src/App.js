@@ -19,11 +19,14 @@ import AdminHome from "./pages/Admin/AdminHome";
 import LandingPage from "./pages/LandingPage";
 import Layout from "./components/shared/Layout/Layout";
 import Contact from "./pages/Contact";
-import About from "./pages/About"
+import About from "./pages/About";
+import SplashCursor from "./components/animations/SplashCursor";
+
 function App() {
   return (
     <>
       <ToastContainer />
+      <SplashCursor />
       <Routes>
         {/* Public landing page */}
         <Route path="/" element={<Layout><LandingPage /></Layout>} />

@@ -1,5 +1,5 @@
 import React from "react";
-import { BiDonateBlood, BiUserCircle } from "react-icons/bi";
+import { BiUserCircle } from "react-icons/bi";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../../redux/features/auth/authSlice";
@@ -25,7 +25,7 @@ const Header = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo and Brand Name */}
           <div className="flex items-center">
-            <BiDonateBlood className="h-8 w-8 text-red-600" />
+            <img src="../../../assets/images/BloodLink Logo.png" alt="bloodLink logo" className="h-14 w-14"/>
             <span className="ml-2 text-2xl font-bold">BloodLink</span>
           </div>
 

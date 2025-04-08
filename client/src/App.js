@@ -18,7 +18,8 @@ import OrgList from "./pages/Admin/OrgList";
 import AdminHome from "./pages/Admin/AdminHome";
 import LandingPage from "./pages/LandingPage";
 import Layout from "./components/shared/Layout/Layout";
-
+import Contact from "./pages/Contact";
+import About from "./pages/About"
 function App() {
   return (
     <>
@@ -26,6 +27,8 @@ function App() {
       <Routes>
         {/* Public landing page */}
         <Route path="/" element={<Layout><LandingPage /></Layout>} />
+        <Route path="/contact" element={<Layout><Contact/></Layout>} />
+        <Route path="/about" element={<Layout><About/></Layout>} />
         
         {/* Protected routes */}
         <Route

@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { BiDonateBlood } from "react-icons/bi";
-import bloodlinkLogo from "../../../../public/assets/images/BloodLink Logo.png"
+import bloodlinkLogo from "../../../assets/images/BloodLink Logo.png";
+import Iridescence from "../../animations/Iridescence";
+import PixelCard from '../../animations/PixelCard';
 
 const LandingHeader = () => {
   return (
@@ -10,8 +11,7 @@ const LandingHeader = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo and Brand Name */}
           <div className="flex items-center">
-            {/* <BiDonateBlood className="h-8 w-8 text-red-600" /> */}
-            <image src={bloodlinkLogo} alt="BloodLink Logo" className="h-8 w-8"/>
+            <img src={bloodlinkLogo} alt="BloodLink Logo" className="h-14 w-14"/>
             <span className="ml-2 text-2xl font-bold text-gray-800">BloodLink</span>
           </div>
 
@@ -24,18 +24,31 @@ const LandingHeader = () => {
 
           {/* Auth Buttons */}
           <div className="flex items-center space-x-4">
-            <Link 
-              to="/login" 
-              className="px-4 py-2 text-gray-600 hover:text-red-600 border border-gray-300 rounded-md hover:border-red-600"
-            >
-              Login
-            </Link>
-            <Link 
-              to="/register" 
-              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-            >
-              Sign Up
-            </Link>
+            <div className="relative h-9 w-fit">
+              <Iridescence
+                color={[0, 1, 1]}
+                mouseReact={true}
+                amplitude={0.1}
+                speed={5.0}
+                className="absolute inset-0 rounded-md overflow-hidden"
+              />  
+              <Link 
+                to="/login" 
+                className="relative hover:scale-105 px-4 py-2 text-gray-600 hover:text-red-600 border border-gray-300 rounded-md hover:border-red-600 bg-white/80"
+              >
+                Login
+              </Link>
+            </div>
+            <div className="relative h-9 w-32">
+              <PixelCard variant="yellow" className="rounded-lg hover:scale-105">
+                <Link 
+                  to="/register" 
+                  className="absolute inset-0 flex items-center justify-center text-black font-medium hover:text-white"
+                >
+                  Sign Up
+                </Link>
+              </PixelCard>
+            </div>
           </div>
         </div>
       </div>

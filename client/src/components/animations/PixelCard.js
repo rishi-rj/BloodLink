@@ -102,7 +102,7 @@ const VARIANTS = {
   default: {
     activeColor: null,
     gap: 100,
-    speed: 95,
+    speed: 10,
     colors: "#f8fafc,#f1f5f9,#cbd5e1",
     noFocus: false
   },

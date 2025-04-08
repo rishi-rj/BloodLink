@@ -1,120 +1,114 @@
-import React from "react";
-// import { userMenu } from "./Menus/userMenu";
-import { useLocation, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import "../../../styles/Layout.css";
+import { Link, useLocation } from "react-router-dom"
+import {
+  FaTint,
+  FaHome,
+  FaUserFriends,
+  FaCalendarAlt,
+  FaChartBar,
+  FaClipboardList,
+  FaCog,
+  FaSignOutAlt,
+} from "react-icons/fa"
 
-const Sidebar = () => {
-  //GET USER STATE
-  const { user } = useSelector((state) => state.auth);
+const Sidebar = ({ children }) => {
+  const location = useLocation()
 
-  const location = useLocation();
+  const menuItems = [
+    {
+      path: "/dashboard",
+      name: "Dashboard",
+      icon: <FaHome className="w-5 h-5" />,
+    },
+    {
+      path: "/donors",
+      name: "Donors",
+      icon: <FaUserFriends className="w-5 h-5" />,
+    },
+    {
+      path: "/donations",
+      name: "Donations",
+      icon: <FaTint className="w-5 h-5" />,
+    },
+    {
+      path: "/requests",
+      name: "Requests",
+      icon: <FaClipboardList className="w-5 h-5" />,
+    },
+    {
+      path: "/schedule",
+      name: "Schedule",
+      icon: <FaCalendarAlt className="w-5 h-5" />,
+    },
+    {
+      path: "/analytics",
+      name: "Analytics",
+      icon: <FaChartBar className="w-5 h-5" />,
+    },
+    {
+      path: "/settings",
+      name: "Settings",
+      icon: <FaCog className="w-5 h-5" />,
+    },
+  ]
 
   return (
-    <div>
-      <div className="sidebar">
-        <div className="menu">
-          {user?.role === "organisation" && (
-            <>
-              <div
-                className={`menu-item ${location.pathname === "/" && "active"}`}
-              >
-                <i className="fa-solid fa-warehouse"></i>
-                <Link to="/">Inventory</Link>
-              </div>
-              <div
-                className={`menu-item ${
-                  location.pathname === "/donar" && "active"
-                }`}
-              >
-                <i className="fa-solid fa-hand-holding-medical"></i>
-                <Link to="/donar">Donar</Link>
-              </div>
-              <div
-                className={`menu-item ${
-                  location.pathname === "/hospital" && "active"
-                }`}
-              >
-                <i className="fa-solid fa-hospital"></i>
-                <Link to="/hospital">Hospital</Link>
-              </div>
-            </>
-          )}
-          {user?.role === "admin" && (
-            <>
-              <div
-                className={`menu-item ${
-                  location.pathname === "/donar-list" && "active"
-                }`}
-              >
-                <i className="fa-solid fa-warehouse"></i>
-                <Link to="/donar-list">Donar List</Link>
-              </div>
-              <div
-                className={`menu-item ${
-                  location.pathname === "/hospital-list" && "active"
-                }`}
-              >
-                <i className="fa-solid fa-hand-holding-medical"></i>
-                <Link to="/hospital-list">Hospital List</Link>
-              </div>
-              <div
-                className={`menu-item ${
-                  location.pathname === "/org-list" && "active"
-                }`}
-              >
-                <i className="fa-solid fa-hospital"></i>
-                <Link to="/org-list">Organisation List</Link>
-              </div>
-            </>
-          )}
-          {(user?.role === "donar" || user?.role === "hospital") && (
-            <div
-              className={`menu-item ${
-                location.pathname === "/orgnaisation" && "active"
-              }`}
-            >
-              <i className="fa-sharp fa-solid fa-building-ngo"></i>
-              <Link to="/orgnaisation">Orgnaisation</Link>
-            </div>
-          )}
-          {user?.role === "hospital" && (
-            <div
-              className={`menu-item ${
-                location.pathname === "/consumer" && "active"
-              }`}
-            >
-              <i className="fa-sharp fa-solid fa-building-ngo"></i>
-              <Link to="/consumer">Consumer</Link>
-            </div>
-          )}
-          {user?.role === "donar" && (
-            <div
-              className={`menu-item ${
-                location.pathname === "/donation" && "active"
-              }`}
-            >
-              <i className="fa-sharp fa-solid fa-building-ngo"></i>
-              <Link to="/donation">Donation</Link>
-            </div>
-          )}
+    <div className="flex">
+      {/* Sidebar */}
+      <div className="bg-white border-r border-gray-200 w-64 min-h-screen shadow-sm">
+        {/* Logo */}
+        <div className="px-6 py-4 border-b border-gray-200">
+          <div className="flex items-center">
+            <FaTint className="h-8 w-8 text-red-600" />
+            <h1 className="ml-2 text-xl font-bold text-gray-800">BloodLink</h1>
+          </div>
+          <p className="text-xs text-gray-500 mt-1">Blood Donation Management</p>
+        </div>
 
-          {/* {userMenu.map((menu) => {
-            const isActive = location.pathname === menu.path;
-            return (
-              <div
-                className={`menu-item ${isActive && "active"}`}
-                key={menu.name}
-              >
-                <i className={menu.icon}></i>
-                <Link to={menu.path}>{menu.name}</Link>
+        {/* Menu Items */}
+        <div className="py-4">
+          <ul className="space-y-1">
+            {menuItems.map((item, index) => (
+              <li key={index}>
+                <Link
+                  to={item.path}
+                  className={`flex items-center px-6 py-3 text-sm ${
+                    location.pathname === item.path
+                      ? "bg-red-50 text-red-600 border-r-4 border-red-600"
+                      : "text-gray-700 hover:bg-gray-50"
+                  }`}
+                >
+                  <span className="mr-3">{item.icon}</span>
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* User Section */}
+        <div className="absolute bottom-0 w-64 border-t border-gray-200">
+          <div className="px-6 py-4">
+            <div className="flex items-center">
+              <div className="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center text-red-600">
+                <span className="font-medium">JD</span>
               </div>
-            );
-          })} */}
+              <div className="ml-3">
+                <p className="text-sm font-medium text-gray-700">John Doe</p>
+                <p className="text-xs text-gray-500">Donor</p>
+              </div>
+            </div>
+            <button className="mt-4 flex items-center text-sm text-gray-700 hover:text-red-600 w-full">
+              <FaSignOutAlt className="mr-2" />
+              Sign Out
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
 
-export default Sidebar;
+      {/* Main Content */}
+      <div className="flex-1">{children}</div>
+    </div>
+  )
+}
+
+export default Sidebar

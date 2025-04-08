@@ -7,6 +7,7 @@ import { BsPostcardHeart } from "react-icons/bs";
 import { MdLocationOn } from "react-icons/md";
 import { IoMdSearch } from "react-icons/io";
 import Ribbons from '../components/animations/Ribbons';
+import DecryptedText from "../components/animations/DecryptedText";
 import { Link } from "react-router-dom";
 
 const HeroSection = () => {
@@ -62,15 +63,46 @@ const HeroSection = () => {
                     {/* Text and Search Section */}
                     <div className="flex-1 pt-[150px] pr-[30px]">
                         <h1 className="text-[65px] leading-[1.2] mb-[20px]">
-                            Connecting{" "}
+                        <DecryptedText
+                                text="Connecting"
+                                animateOn="view"
+                                revealDirection="center"
+                                speed={100}
+                                maxIterations={10}
+                                className="text-[#555]"
+                                encryptedClassName="text-gray-400"
+                            />{" "}
                             <span className="bg-gradient-to-r from-[#ff0000] to-[#ff4d4d] bg-clip-text text-transparent font-bold">
-                                Donors  <br/>
+                            <DecryptedText
+                                text="Donors"
+                                animateOn="view"
+                                revealDirection="center"
+                                speed={100}
+                                maxIterations={10}
+                                encryptedClassName="text-gray-400"
+                            />  <br/>
                             </span>{" "}
-                            with those in need
+                            <DecryptedText
+                                text="with those in need"
+                                animateOn="view"
+                                revealDirection="center"
+                                speed={100}
+                                maxIterations={10}
+                                className="text-[#555]"
+                                encryptedClassName="text-gray-400"
+                            />
                         </h1>
-                        <p className="text-[18px] mb-[30px] text-[#555]">
-                            Join our mission to save lives through efficient blood donation and management.
-                        </p>
+                        <div className="text-[18px] mb-[30px] text-[#555]">
+                            <DecryptedText 
+                                text="Join our mission to save lives through efficient blood donation and management"
+                                animateOn="view"
+                                revealDirection="center"
+                                speed={100}
+                                maxIterations={10}
+                                className="text-[#555]"
+                                encryptedClassName="text-gray-400"
+                            />
+                        </div>
 
                         {/* Search Bar */}
                         <div className="absolute z-10 mt-[60px] w-[1200px] h-[100px] left-[150px] gap-[10px] bg-white/90 p-[20px] rounded-[10px] shadow-md md:flex hidden">

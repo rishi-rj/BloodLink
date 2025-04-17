@@ -16,6 +16,7 @@ import DonarList from "./pages/Admin/DonarList";
 import HospitalList from "./pages/Admin/HospitalList";
 import OrgList from "./pages/Admin/OrgList";
 import AdminHome from "./pages/Admin/AdminHome";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
 import LandingPage from "./pages/LandingPage";
 import Layout from "./components/shared/Layout/Layout";
 import Contact from "./pages/Contact";
@@ -44,6 +45,14 @@ function App() {
         />
         <Route
           path="/admin"
+          element={
+            <ProtectedRoute>
+              <Layout><AdminDashboard /></Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin-home"
           element={
             <ProtectedRoute>
               <AdminHome />

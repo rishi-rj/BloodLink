@@ -7,7 +7,6 @@ import {
   FaChartBar,
   FaClipboardList,
   FaCog,
-  FaSignOutAlt,
 } from "react-icons/fa"
 
 const Sidebar = ({ children }) => {
@@ -85,24 +84,7 @@ const Sidebar = ({ children }) => {
           </ul>
         </div>
 
-        {/* User Section */}
-        <div className="absolute bottom-0 w-64 border-t border-gray-200">
-          <div className="px-6 py-4">
-            <div className="flex items-center">
-              <div className="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center text-red-600">
-                <span className="font-medium">JD</span>
-              </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium text-gray-700">John Doe</p>
-                <p className="text-xs text-gray-500">Donor</p>
-              </div>
-            </div>
-            <button className="mt-4 flex items-center text-sm text-gray-700 hover:text-red-600 w-full">
-              <FaSignOutAlt className="mr-2" />
-              Sign Out
-            </button>
-          </div>
-        </div>
+        
       </div>
 
       {/* Main Content */}

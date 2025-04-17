@@ -1,4 +1,5 @@
 const userModel = require("../models/userModel");
+const inventoryModel = require("../models/inventoryModel");
 
 //GET DONAR LIST
 const getDonarsListController = async (req, res) => {
@@ -86,10 +87,129 @@ const deleteDonarController = async (req, res) => {
   }
 };
 
+// Get all users with their donation/request history
+const getUsersController = async (req, res) => {
+  try {
+    const { search } = req.query;
+    let query = {};
+    let limit = 10; // Default limit
+    
+    if (search && search.trim()) {
+      query = {
+        $or: [
+          { name: { $regex: search, $options: 'i' } },
+          { email: { $regex: search, $options: 'i' } },
+          { role: { $regex: search, $options: 'i' } }
+        ]
+      };
+      limit = undefined; // No limit for search results
+    }
+
+    // Get users sorted by creation date
+    const users = await userModel
+      .find(query)
+      .select('-password')
+      .sort({ createdAt: -1 })
+      .limit(limit);
+
+    if (!users.length && !search) {
+      return res.status(200).send({
+        success: true,
+        message: "No users found",
+        users: []
+      });
+    }
+
+    // Get donation/request history for each user
+    const usersWithHistory = await Promise.all(
+      users.map(async (user) => {
+        const [donations, requests] = await Promise.all([
+          inventoryModel.countDocuments({
+            email: user.email,
+            inventoryType: "in"
+          }),
+          inventoryModel.countDocuments({
+            email: user.email,
+            inventoryType: "out"
+          })
+        ]);
+
+        return {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          phone: user.phone,
+          createdAt: user.createdAt,
+          donations,
+          requests
+        };
+      })
+    );
+
+    return res.status(200).send({
+      success: true,
+      message: search ? "Search results" : "Latest users fetched successfully",
+      totalCount: await userModel.countDocuments(query),
+      users: usersWithHistory
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      message: "Error in getting users",
+      error: error.message
+    });
+  }
+};
+
+// Get user details with full history
+const getUserDetailsController = async (req, res) => {
+  try {
+    const user = await userModel.findById(req.params.id).select('-password');
+    if (!user) {
+      return res.status(404).send({
+        success: false,
+        message: "User not found"
+      });
+    }
+
+    const donations = await inventoryModel.find({
+      email: user.email,
+      inventoryType: "in"
+    }).sort({ createdAt: -1 });
+
+    const requests = await inventoryModel.find({
+      email: user.email,
+      inventoryType: "out"
+    }).sort({ createdAt: -1 });
+
+    return res.status(200).send({
+      success: true,
+      user: {
+        ...user.toObject(),
+        history: {
+          donations,
+          requests
+        }
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      message: "Error in getting user details",
+      error
+    });
+  }
+};
+
 //EXPORT
 module.exports = {
   getDonarsListController,
   getHospitalListController,
   getOrgListController,
   deleteDonarController,
+  getUsersController,
+  getUserDetailsController
 };

@@ -6,18 +6,31 @@ const createCampaign = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ success: false, message: "Validation error", errors: errors.array() });
     }
 
-    const campaign = new Campaign(req.body);
+    // Format the date properly
+    const campaignData = {
+      ...req.body,
+      isActive: true,
+      date: new Date(req.body.date)
+    };
+
+    const campaign = new Campaign(campaignData);
     await campaign.save();
+    
     res.status(201).json({
       success: true,
       message: "Campaign created successfully",
       campaign,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Server error", error });
+    console.error("Campaign creation error:", error);
+    res.status(500).json({ 
+      success: false, 
+      message: "Error creating campaign", 
+      error: error.message 
+    });
   }
 };
 
@@ -61,28 +74,57 @@ const deleteCampaign = async (req, res) => {
 // Get all campaigns (Admin)
 const getAllCampaigns = async (req, res) => {
   try {
-    const campaigns = await Campaign.find().sort({ createdAt: -1 });
+    const campaigns = await Campaign.find()
+      .sort({ createdAt: -1 })
+      .populate('organisation', 'name');
+
+    if (!campaigns) {
+      return res.status(200).json({
+        success: true,
+        campaigns: []
+      });
+    }
+
     res.status(200).json({
       success: true,
-      campaigns,
+      message: "Campaigns fetched successfully",
+      campaigns: campaigns.map(campaign => ({
+        ...campaign.toObject(),
+        organisationName: campaign.organisation?.name
+      }))
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Server error", error });
+    console.error("Error fetching campaigns:", error);
+    res.status(500).json({ 
+      success: false, 
+      message: "Error fetching campaigns", 
+      error: error.message 
+    });
   }
 };
 
 // Get active campaigns (Users)
 const getActiveCampaigns = async (req, res) => {
   try {
-    const campaigns = await Campaign.find({ isActive: true }).sort({
-      startDate: 1,
-    });
+    const campaigns = await Campaign.find({ isActive: true })
+      .sort({ date: 1 })
+      .populate('organisation', 'name');
+
     res.status(200).json({
       success: true,
-      campaigns,
+      message: "Active campaigns fetched successfully",
+      campaigns: campaigns.map(campaign => ({
+        ...campaign.toObject(),
+        organisationName: campaign.organisation?.name
+      }))
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Server error", error });
+    console.error("Error fetching active campaigns:", error);
+    res.status(500).json({ 
+      success: false, 
+      message: "Error fetching active campaigns", 
+      error: error.message 
+    });
   }
 };
 

@@ -261,6 +261,204 @@ const getOrgnaisationForHospitalController = async (req, res) => {
   }
 };
 
+// GET ADMIN INVENTORY
+const getAdminInventoryController = async (req, res) => {
+  try {
+    const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+    const inventory = await Promise.all(
+      bloodGroups.map(async (bloodGroup) => {
+        // Calculate total IN
+        const totalIn = await inventoryModel.aggregate([
+          {
+            $match: {
+              bloodGroup,
+              inventoryType: "in"
+            }
+          },
+          {
+            $group: {
+              _id: null,
+              total: { $sum: "$quantity" }
+            }
+          }
+        ]);
+
+        // Calculate total OUT
+        const totalOut = await inventoryModel.aggregate([
+          {
+            $match: {
+              bloodGroup,
+              inventoryType: "out"
+            }
+          },
+          {
+            $group: {
+              _id: null,
+              total: { $sum: "$quantity" }
+            }
+          }
+        ]);
+
+        const available = (totalIn[0]?.total || 0) - (totalOut[0]?.total || 0);
+
+        return {
+          bloodGroup,
+          quantity: available
+        };
+      })
+    );
+
+    return res.status(200).send({
+      success: true,
+      message: "Admin Inventory Data Fetched Successfully",
+      inventory
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      message: "Error in Admin Inventory API",
+      error
+    });
+  }
+};
+
+// GET ADMIN REQUESTS
+const getAdminRequestsController = async (req, res) => {
+  try {
+    const requests = await inventoryModel
+      .find({ 
+        inventoryType: "out",
+        $or: [
+          { status: "pending" },
+          { status: "approved" },
+          { status: "rejected" }
+        ]
+      })
+      .populate("hospital", "name email")
+      .sort({ createdAt: -1 });
+
+    return res.status(200).send({
+      success: true,
+      message: "Admin Requests Data Fetched Successfully",
+      requests: requests.map(request => ({
+        ...request.toObject(),
+        hospitalName: request.hospital?.name,
+        status: request.status || 'pending'
+      }))
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      message: "Error in Admin Requests API",
+      error
+    });
+  }
+};
+
+// HANDLE BLOOD REQUEST
+const handleBloodRequestController = async (req, res) => {
+  try {
+    const { requestId, status } = req.body;
+    const request = await inventoryModel.findById(requestId)
+      .populate('hospital', 'email name')
+      .populate('organisation');
+
+    if (!request) {
+      return res.status(404).send({
+        success: false,
+        message: "Request not found"
+      });
+    }
+
+    // Check if request is already processed
+    if (request.status && request.status !== 'pending') {
+      return res.status(400).send({
+        success: false,
+        message: `Request is already ${request.status}`
+      });
+    }
+
+    if (status === "approve") {
+      // Check if enough blood is available
+      const availableBlood = await inventoryModel.aggregate([
+        {
+          $match: {
+            bloodGroup: request.bloodGroup,
+            inventoryType: "in",
+            organisation: request.organisation._id
+          }
+        },
+        {
+          $group: {
+            _id: "$bloodGroup",
+            total: { $sum: "$quantity" }
+          }
+        }
+      ]);
+
+      const totalAvailable = availableBlood[0]?.total || 0;
+      const totalOut = await inventoryModel.aggregate([
+        {
+          $match: {
+            bloodGroup: request.bloodGroup,
+            inventoryType: "out",
+            organisation: request.organisation._id
+          }
+        },
+        {
+          $group: {
+            _id: "$bloodGroup",
+            total: { $sum: "$quantity" }
+          }
+        }
+      ]);
+
+      const actualAvailable = totalAvailable - (totalOut[0]?.total || 0);
+
+      if (actualAvailable < request.quantity) {
+        return res.status(400).send({
+          success: false,
+          message: `Not enough blood available. Only ${actualAvailable} units available.`
+        });
+      }
+
+      // Update original request status
+      request.status = "approved";
+      await request.save();
+
+      // Create new out inventory record
+      const outInventory = new inventoryModel({
+        bloodGroup: request.bloodGroup,
+        quantity: request.quantity,
+        email: request.hospital.email,
+        inventoryType: "out",
+        hospital: request.hospital._id,
+        organisation: request.organisation._id,
+        status: "approved",
+        requestId: request._id
+      });
+      await outInventory.save();
+    } else if (status === "reject") {
+      request.status = "rejected";
+      await request.save();
+    }
+
+    return res.status(200).send({
+      success: true,
+      message: `Request ${status}ed successfully`
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      message: "Error in handling request",
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   createInventoryController,
   getInventoryController,
@@ -270,4 +468,7 @@ module.exports = {
   getOrgnaisationForHospitalController,
   getInventoryHospitalController,
   getRecentInventoryController,
+  getAdminInventoryController,
+  getAdminRequestsController,
+  handleBloodRequestController
 };

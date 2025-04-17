@@ -10,20 +10,18 @@ const campaignSchema = new mongoose.Schema(
       type: String,
       required: [true, "Campaign description is required"],
     },
-    images: [String], // Array of image URLs
-    videos: [String], // Array of video URLs
-    startDate: {
+    date: {
       type: Date,
-      required: [true, "Start date is required"],
+      required: [true, "Date is required"],
     },
-    endDate: {
-      type: Date,
-      required: [true, "End date is required"],
+    location: {
+      type: String,
+      required: [true, "Location is required"],
     },
-    socialLinks: {
-      facebook: String,
-      twitter: String,
-      whatsapp: String,
+    organisation: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+      required: [true, "Organisation is required"],
     },
     isActive: {
       type: Boolean,

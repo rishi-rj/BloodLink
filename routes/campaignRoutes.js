@@ -1,6 +1,5 @@
 const express = require("express");
-const { body } = require("express-validator");
-const authMiddleware = require("../middlewares/authMiddelware");
+const authMiddelware = require("../middlewares/authMiddelware");
 const adminMiddleware = require("../middlewares/adminMiddleware");
 const {
   createCampaign,
@@ -15,25 +14,14 @@ const {
 const router = express.Router();
 
 // Admin routes
-router.post(
-  "/",
-  authMiddleware,
-  adminMiddleware,
-  [
-    body("title").notEmpty().withMessage("Title is required"),
-    body("description").notEmpty().withMessage("Description is required"),
-    body("startDate").isDate().withMessage("Start date must be a valid date"),
-    body("endDate").isDate().withMessage("End date must be a valid date"),
-  ],
-  createCampaign
-);
-router.put("/:id", authMiddleware, adminMiddleware, updateCampaign);
-router.delete("/:id", authMiddleware, adminMiddleware, deleteCampaign);
-router.get("/", authMiddleware, adminMiddleware, getAllCampaigns);
+router.post("/create", authMiddelware, adminMiddleware, createCampaign);
+router.put("/:id", authMiddelware, adminMiddleware, updateCampaign);
+router.delete("/:id", authMiddelware, adminMiddleware, deleteCampaign);
+router.get("/admin-campaigns", authMiddelware, adminMiddleware, getAllCampaigns);
 
-// User routes
+// Public routes
 router.get("/active", getActiveCampaigns);
-router.post("/like/:id", authMiddleware, likeCampaign);
-router.post("/comment/:id", authMiddleware, commentOnCampaign);
+router.post("/:id/like", authMiddelware, likeCampaign);
+router.post("/:id/comment", authMiddelware, commentOnCampaign);
 
 module.exports = router;

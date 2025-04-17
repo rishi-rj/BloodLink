@@ -9,6 +9,9 @@ const {
   getOrgnaisationForHospitalController,
   getInventoryHospitalController,
   getRecentInventoryController,
+  getAdminInventoryController,
+  getAdminRequestsController,
+  handleBloodRequestController
 } = require("../controllers/inventoryController");
 
 const router = express.Router();
@@ -48,5 +51,10 @@ router.get(
   authMiddelware,
   getOrgnaisationForHospitalController
 );
+
+// Admin Routes
+router.get("/admin-inventory", authMiddelware, getAdminInventoryController);
+router.get("/admin-requests", authMiddelware, getAdminRequestsController);
+router.post("/handle-request", authMiddelware, handleBloodRequestController);
 
 module.exports = router;

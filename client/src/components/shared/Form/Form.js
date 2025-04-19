@@ -197,14 +197,14 @@ const Form = ({ formType, submitBtn, formTitle }) => {
           }
         })()}
 
-        <div className="d-flex flex-row justify-content-between">
+        <div className="d-flex justify-content-between">
           {formType === "login" ? (
             <p>
               Not registerd yet ? Register
               <Link to="/register"> Here !</Link>
             </p>
           ) : (
-            <p>
+            <p className="text-black">
               ALready Usser Please
               <Link to="/login"> Login !</Link>
             </p>
@@ -212,6 +212,9 @@ const Form = ({ formType, submitBtn, formTitle }) => {
           <button className="btn btn-primary" type="submit">
             {submitBtn}
           </button>
+          <div className="">
+            <Link to="/forgot-password">Forgot Password ?</Link>
+          </div>
         </div>
       </form>
     </div>

@@ -23,16 +23,16 @@ const inventorySchema = new mongoose.Schema(
     },
     organisation: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
+      ref: "User", // Correct model name
       required: [true, "Organisation is required"],
     },
     hospital: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
+      ref: "User", // Correct model name
     },
     donar: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
+      ref: "User", // Correct model name
     },
     status: {
       type: String,

@@ -22,6 +22,7 @@ import Layout from "./components/shared/Layout/Layout";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import SplashCursor from "./components/animations/SplashCursor";
+import ForgotPassword from "./pages/auth/ForgotPassword";
 
 function App() {
   return (
@@ -145,6 +146,14 @@ function App() {
           element={
             <PublicRoute>
               <Register />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <PublicRoute>
+              <ForgotPassword />
             </PublicRoute>
           }
         />

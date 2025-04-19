@@ -97,8 +97,9 @@ const getInventoryController = async (req, res) => {
       .find({
         organisation: req.body.userId,
       })
-      .populate("donar")
-      .populate("hospital")
+      .populate({ path: "donar", model: "User" })
+      .populate({ path: "hospital", model: "User" })
+      .populate({ path: "organisation", model: "User" })
       .sort({ createdAt: -1 });
     return res.status(200).send({
       success: true,
@@ -327,32 +328,22 @@ const getAdminInventoryController = async (req, res) => {
 const getAdminRequestsController = async (req, res) => {
   try {
     const requests = await inventoryModel
-      .find({ 
-        inventoryType: "out",
-        $or: [
-          { status: "pending" },
-          { status: "approved" },
-          { status: "rejected" }
-        ]
-      })
-      .populate("hospital", "name email")
+      .find({ inventoryType: "out" })
+      .populate({ path: "hospital", model: "User", select: "name email" })
+      .populate({ path: "organisation", model: "User", select: "name email" })
       .sort({ createdAt: -1 });
 
-    return res.status(200).send({
+    res.status(200).send({
       success: true,
-      message: "Admin Requests Data Fetched Successfully",
-      requests: requests.map(request => ({
-        ...request.toObject(),
-        hospitalName: request.hospital?.name,
-        status: request.status || 'pending'
-      }))
+      message: "Admin requests fetched successfully",
+      requests,
     });
   } catch (error) {
     console.log(error);
-    return res.status(500).send({
+    res.status(500).send({
       success: false,
-      message: "Error in Admin Requests API",
-      error
+      message: "Error fetching admin requests",
+      error,
     });
   }
 };

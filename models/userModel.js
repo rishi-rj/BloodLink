@@ -54,8 +54,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "phone numbe is required"],
     },
+    resetOtp: {
+      type: Number,
+    },
+    resetOtpExpiry: {
+      type: Date,
+    },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("users", userSchema);
+module.exports = mongoose.model("User", userSchema);

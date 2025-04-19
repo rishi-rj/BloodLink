@@ -76,29 +76,29 @@ const getAllCampaigns = async (req, res) => {
   try {
     const campaigns = await Campaign.find()
       .sort({ createdAt: -1 })
-      .populate('organisation', 'name');
+      .populate({ path: "organisation", model: "User", select: "name" }); // Correct model name
 
     if (!campaigns) {
       return res.status(200).json({
         success: true,
-        campaigns: []
+        campaigns: [],
       });
     }
 
     res.status(200).json({
       success: true,
       message: "Campaigns fetched successfully",
-      campaigns: campaigns.map(campaign => ({
+      campaigns: campaigns.map((campaign) => ({
         ...campaign.toObject(),
-        organisationName: campaign.organisation?.name
-      }))
+        organisationName: campaign.organisation?.name,
+      })),
     });
   } catch (error) {
     console.error("Error fetching campaigns:", error);
-    res.status(500).json({ 
-      success: false, 
-      message: "Error fetching campaigns", 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      message: "Error fetching campaigns",
+      error: error.message,
     });
   }
 };
@@ -108,22 +108,22 @@ const getActiveCampaigns = async (req, res) => {
   try {
     const campaigns = await Campaign.find({ isActive: true })
       .sort({ date: 1 })
-      .populate('organisation', 'name');
+      .populate({ path: "organisation", model: "User", select: "name" }); // Correct model name
 
     res.status(200).json({
       success: true,
       message: "Active campaigns fetched successfully",
-      campaigns: campaigns.map(campaign => ({
+      campaigns: campaigns.map((campaign) => ({
         ...campaign.toObject(),
-        organisationName: campaign.organisation?.name
-      }))
+        organisationName: campaign.organisation?.name,
+      })),
     });
   } catch (error) {
     console.error("Error fetching active campaigns:", error);
-    res.status(500).json({ 
-      success: false, 
-      message: "Error fetching active campaigns", 
-      error: error.message 
+    res.status(500).json({
+      success: false,
+      message: "Error fetching active campaigns",
+      error: error.message,
     });
   }
 };

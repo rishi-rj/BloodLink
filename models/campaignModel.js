@@ -20,7 +20,7 @@ const campaignSchema = new mongoose.Schema(
     },
     organisation: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
+      ref: "User", // Correct model name
       required: [true, "Organisation is required"],
     },
     isActive: {
@@ -33,7 +33,7 @@ const campaignSchema = new mongoose.Schema(
     },
     comments: [
       {
-        user: { type: mongoose.Schema.Types.ObjectId, ref: "users" },
+        user: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // Correct model name
         comment: String,
         createdAt: { type: Date, default: Date.now },
       },

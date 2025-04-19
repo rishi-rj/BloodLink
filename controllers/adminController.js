@@ -204,6 +204,31 @@ const getUserDetailsController = async (req, res) => {
   }
 };
 
+// Get inventory
+const getInventoryController = async (req, res) => {
+  try {
+    const inventory = await inventoryModel
+      .find({ organisation: req.body.userId })
+      .populate({ path: "donar", model: "User", select: "name email" })
+      .populate({ path: "hospital", model: "User", select: "name email" })
+      .populate({ path: "organisation", model: "User", select: "name email" })
+      .sort({ createdAt: -1 });
+
+    res.status(200).send({
+      success: true,
+      message: "Inventory fetched successfully",
+      inventory,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error fetching inventory",
+      error,
+    });
+  }
+};
+
 //EXPORT
 module.exports = {
   getDonarsListController,
@@ -211,5 +236,6 @@ module.exports = {
   getOrgListController,
   deleteDonarController,
   getUsersController,
-  getUserDetailsController
+  getUserDetailsController,
+  getInventoryController
 };

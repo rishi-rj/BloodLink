@@ -1,4 +1,4 @@
-# 🩸 BloodLink - Connect with Blood Banks & Hospitals
+# 🩸 BloodLink - Connect Life Through Donations
 
 [![GitHub Repo](https://img.shields.io/badge/GitHub-BloodLink-blue?logo=github)](https://github.com/rishi-rj/BloodLink)
 
